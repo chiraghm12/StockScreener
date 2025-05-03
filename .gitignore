@@ -172,3 +172,11 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+# ignore logs files
+/stock_screener_logs
+
+# ignore migrations files
+**/migrations/**
+!**/migrations
+!**/migrations/__init__.py
