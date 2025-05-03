@@ -41,6 +41,7 @@ Formatter = {
 
 log_types = [
     "stock_screener",
+    "upload_data",
 ]
 
 
