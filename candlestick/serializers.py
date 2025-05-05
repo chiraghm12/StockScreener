@@ -1,9 +1,9 @@
 from rest_framework import serializers
 
-from .models import StockList
+from .models import Stock
 
 
-class StockListSerializers(serializers.ModelSerializer):
+class StockSerializers(serializers.ModelSerializer):
     class Meta:
-        model = StockList
+        model = Stock
         fields = "__all__"

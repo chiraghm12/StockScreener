@@ -2,7 +2,7 @@ from django.db import models
 
 
 # Create your models here.
-class StockList(models.Model):
+class Stock(models.Model):
     company_name = models.CharField(max_length=255)
     symbol = models.CharField(max_length=255)
     sector = models.CharField(max_length=255)
@@ -11,3 +11,22 @@ class StockList(models.Model):
     def save(self, *args, **kwargs):
         self.symbol_for_use = f"{self.symbol}.NS"
         return super().save(*args, **kwargs)
+
+
+class OHLCData(models.Model):
+    data_date = models.DateField()
+    open_price = models.DecimalField(max_digits=10, decimal_places=2)
+    close_price = models.DecimalField(max_digits=10, decimal_places=2)
+    high_price = models.DecimalField(max_digits=10, decimal_places=2)
+    low_price = models.DecimalField(max_digits=10, decimal_places=2)
+    stock = models.ForeignKey(Stock, on_delete=models.CASCADE, related_name="ohlc_data")
+
+
+class Hammer(models.Model):
+    data_date = models.DateField()
+    stocks = models.ManyToManyField(Stock)
+
+
+class InvertedHammer(models.Model):
+    data_date = models.DateField()
+    stocks = models.ManyToManyField(Stock)
