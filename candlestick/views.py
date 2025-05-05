@@ -8,7 +8,7 @@ from rest_framework import parsers, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .models import StockList
+from .models import Stock
 
 
 def home_view(request):
@@ -41,11 +41,11 @@ class UploadStockDataView(APIView):
                 reader = csv.DictReader(io_string)
 
                 # Delete all old data
-                StockList.objects.all().delete()
+                Stock.objects.all().delete()
 
                 created_objects = []
                 for row in reader:
-                    stock = StockList(
+                    stock = Stock(
                         company_name=row.get("Company Name").strip(),
                         symbol=row.get("Symbol").strip(),
                         sector=row.get("Industry").strip(),
