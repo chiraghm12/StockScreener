@@ -6,11 +6,7 @@ class Stock(models.Model):
     company_name = models.CharField(max_length=255)
     symbol = models.CharField(max_length=255)
     sector = models.CharField(max_length=255)
-    symbol_for_use = models.CharField(max_length=255, null=True, blank=True)
-
-    def save(self, *args, **kwargs):
-        self.symbol_for_use = f"{self.symbol}.NS"
-        return super().save(*args, **kwargs)
+    isin_code = models.CharField(max_length=255, null=True, blank=True)
 
 
 class OHLCData(models.Model):
@@ -30,3 +26,7 @@ class Hammer(models.Model):
 class InvertedHammer(models.Model):
     data_date = models.DateField()
     stocks = models.ManyToManyField(Stock)
+
+
+class UpatoxAccessToken(models.Model):
+    token = models.TextField()
