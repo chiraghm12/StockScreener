@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}Upstox Authorization SuccessFul{% endblock %}
+
+{% block content %}
+<div class="h-screen bg-gradient-to-br from-[#1E3A8A] to-[#0D9488] overflow-auto hide-scrollbar">
+    <div class="p-10 text-[#7CFC00] rounded-md text-center">
+        <h1 class="font-bold text-2xl pl-5">
+            Upstox Authorization Success
+        </h1>
+    </div>
+    <div class="p-10 text-[#7CFC00] rounded-md transition-transform duration-500 animate-fade-in-up">
+        <svg xmlns="http://www.w3.org/2000/svg" height="180" width="180" viewBox="0 0 512 512" class="m-auto"><path fill="#FFFFFF" d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM369 209L241 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L335 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z"/></svg>
+    </div>
+    <div class="p-10 text-[#7CFC00] rounded-md transition-transform duration-500 animate-fade-in-up text-center">
+        <button
+            class="m-auto bg-white hover:bg-gray-200 text-[#156889] text-xl font-semibold py-2 px-6 rounded-lg shadow-lg transition-transform duration-500 animate-fade-in-up"
+            onclick="window.location.href='{% url 'Home' %}'"
+        >
+            Home
+        </button>
+    </div>
+</div>
+{% endblock %}

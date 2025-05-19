@@ -137,3 +137,10 @@ LOGGING_DIR = os.path.join(BASE_DIR, "stock_screener_logs")
 os.makedirs(LOGGING_DIR, exist_ok=True)
 LOGGING_CONFIG = None
 logging.config.dictConfig(LOGGING)
+
+
+# Upstox Credentials
+REDIRCT_URL = os.getenv("REDIRCT_URL")
+CLIENT_ID = os.getenv("CLIENT_ID")
+CLIENT_SECRET = os.getenv("CLIENT_SECRET")
+ACCESS_TOKEN_URL = os.getenv("ACCESS_TOKEN_URL")

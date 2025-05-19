@@ -1,34 +1,25 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Stock Screener</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    /* Custom animation */
-    @keyframes fadeInUp {
-      from {
-        opacity: 0;
-      }
-      to {
-        opacity: 1;
-      }
-    }
+{% extends "base.html" %}
 
-    .animate-fade-in-up {
-      animation: fadeInUp 1s ease-out both;
-    }
-  </style>
-</head>
-<body class="h-screen bg-gradient-to-br from-[#1E3A8A] to-[#0D9488] flex items-center justify-center">
-  <div class="text-center space-y-6">
-    <p class="text-2xl font-bold text-white animate-fade-in-up">
-      Click the button below to Explore Stock Screener
-    </p>
-    <button class="bg-white hover:bg-grey-200 text-[#1E3A8A] text-xl font-semibold py-2 px-6 rounded-lg shadow-lg transition-transform duration-500 hover:scale-105 animate-fade-in-up">
-            Explore
-    </button>
-  </div>
-</body>
-</html>
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<div class="h-screen bg-gradient-to-br from-[#1E3A8A] to-[#0D9488] flex items-center justify-center">
+    <div class="text-center space-y-6">
+        <p class="text-2xl font-bold text-white animate-fade-in-up">
+            Click the button below to Explore Stock Screener
+        </p>
+        <button
+            class="bg-white hover:bg-gray-200 text-[#156889] text-xl font-semibold py-2 px-6 rounded-lg shadow-lg transition-transform duration-500 animate-fade-in-up"
+            onclick="window.location.href='{% url 'CandleStick' %}'"
+        >
+            CandleStick Patterns
+        </button>
+        <button
+            class="bg-white hover:bg-gray-200 text-[#156889] text-xl font-semibold py-2 px-6 rounded-lg shadow-lg transition-transform duration-500 animate-fade-in-up"
+            onclick="window.location.href='{% url 'upstox_authentication' %}'"
+        >
+            Upstox Authorization
+        </button>
+    </div>
+</div>
+{% endblock %}
