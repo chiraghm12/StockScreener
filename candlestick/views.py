@@ -1,3 +1,10 @@
+"""
+Module: views.py
+
+Handles stock-related views including uploading stock data, refreshing OHLC candlestick data, and
+managing Upstox authentication for a Django-based stock screener application.
+"""
+
 import csv
 import io
 import logging
@@ -25,16 +32,28 @@ from .models import OHLCData, Stock, UpatoxAccessToken
 
 
 def refresh_candlestick_data(start_date, end_date):
+    """
+    Fetches OHLC (Open, High, Low, Close) candlestick data for all stocks between the given dates
+    using the Upstox API and stores them in the database.
+
+    Args:
+        start_date (str): The start date in 'YYYY-MM-DD' format.
+        end_date (str): The end date in 'YYYY-MM-DD' format.
+
+    Returns:
+        str: "Success" if data was fetched and stored successfully, otherwise "Error".
+    """
     logger = logging.getLogger("stock_screener_logger")
     try:
         stocks = Stock.objects.all()
         access_token = UpatoxAccessToken.objects.all()[0].token
 
         logger.info("OHLC Data fetch Starting..")
-
+        # Delete all old Data
         OHLCData.objects.all().delete()
 
         for stock in stocks:
+            # fetch data from upstox
             url = f"https://api.upstox.com/v3/historical-candle/{stock.isin_code}/days/1/{end_date}/{start_date}"
             headers = {"Accept": "application/json", "Authorization": access_token}
             payload = {}
@@ -57,23 +76,45 @@ def refresh_candlestick_data(start_date, end_date):
                         )
                     )
                 if ohlc_objects:
+                    # create ohlc data for two days in bulk
                     OHLCData.objects.bulk_create(ohlc_objects, batch_size=100)
-                    logger.info(f"Data for {stock.symbol} fetched")
-
+                    logger.info(
+                        f"Data for {stock.symbol} fetched"
+                    )  # pylint: disable=W1203
+            # sleep half second in between
             time.sleep(0.5)
         logger.info("OHLC Data fetched Successfully")
         return "Success"
-    except Exception as e:
-        logger.error(f"Error : {e}", exc_info=True)
+    except Exception as e:  # pylint: disable=W0718
+        logger.error(f"Error : {e}", exc_info=True)  # pylint: disable=W1203
         return "Error"
 
 
 def home_view(request):
+    """
+    Renders the homepage.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+
+    Returns:
+        HttpResponse: Rendered home.html page.
+    """
     return render(request=request, template_name="home.html")
 
 
 @csrf_protect
 def candlestickpatterns_view(request):
+    """
+    Handles GET and POST requests for the candlestick patterns page.
+    On POST, triggers data fetching from Upstox API and displays status messages via session.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+
+    Returns:
+        HttpResponse: Rendered patterns.html page with patterns and result message.
+    """
     patterns = [
         "Hammer",
         "Inverted Hammer",
@@ -116,14 +157,37 @@ def candlestickpatterns_view(request):
 
 
 def upstox_authentication_view(request):
+    """
+    Redirects the user to Upstox authentication URL to authorize the app.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+
+    Returns:
+        HttpResponseRedirect: Redirect to Upstox login page.
+    """
     url = f"https://api.upstox.com/v2/login/authorization/dialog?client_id={CLIENT_ID}&redirect_uri={REDIRCT_URL}"
     return HttpResponseRedirect(url)
 
 
 class UploadStockDataView(APIView):
+    """
+    API View to handle uploading and storing stock data (Nifty 500) via a CSV file.
+    """
+
     parser_classes = [parsers.MultiPartParser, parsers.FormParser]
 
     def post(self, request):
+        """
+        Handles POST request to upload stock data from a CSV file.
+        Clears existing stock data and replaces it with the uploaded data.
+
+        Args:
+            request (HttpRequest): The HTTP request object with the CSV file.
+
+        Returns:
+            Response: JSON response with upload status and created objects.
+        """
         logger = logging.getLogger("upload_data_logger")
         try:
             with transaction.atomic():
@@ -146,7 +210,7 @@ class UploadStockDataView(APIView):
                 reader = csv.DictReader(io_string)
 
                 # Delete all old data
-                Stock.objects.all().delete()  # pylint: disable=E1101
+                Stock.objects.all().delete()
 
                 created_objects = []
                 for row in reader:
@@ -174,14 +238,23 @@ class UploadStockDataView(APIView):
                     },
                     status=status.HTTP_201_CREATED,
                 )
-        except Exception as e:
+        except Exception as e:  # pylint: disable=W0718
             logger.error(e, exc_info=True)
-            response_data = {"Status": "Failure", "Error": str(e.__str__())}
+            response_data = {"Status": "Failure", "Error": str(e)}
             return Response(response_data, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 def upstox_authentication_success(request):
-    print(request)
+    """
+    Handles redirect from Upstox after successful authentication,
+    exchanges authorization code for access token and saves it.
+
+    Args:
+        request (HttpRequest): The HTTP request containing the authorization code.
+
+    Returns:
+        HttpResponse: Rendered success.html page.
+    """
     code = request.GET.get("code", "")
 
     payload = {
@@ -201,5 +274,5 @@ def upstox_authentication_success(request):
     )
     access_token = response.json().get("access_token")
 
-    UpatoxAccessToken.objects.create(token=access_token)  # pylint: disable=E1101
+    UpatoxAccessToken.objects.create(token=access_token)
     return render(request=request, template_name="success.html")
