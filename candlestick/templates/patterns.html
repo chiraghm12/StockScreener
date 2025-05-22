@@ -5,16 +5,52 @@
 {% block content %}
 <div class="h-screen bg-gradient-to-br from-[#1E3A8A] to-[#0D9488] overflow-auto hide-scrollbar">
     <div class="flex flex-col justify-center p-5 gap-y-2">
-        <div class="p-10 flex items-center text-white bg-white/10 rounded-md">
-            <div>
-                <svg xmlns="http://www.w3.org/2000/svg" height="50" width="50" viewBox="0 0 448 512">
-                    <path fill="#ffffff"
-                        d="M160 80c0-26.5 21.5-48 48-48l32 0c26.5 0 48 21.5 48 48l0 352c0 26.5-21.5 48-48 48l-32 0c-26.5 0-48-21.5-48-48l0-352zM0 272c0-26.5 21.5-48 48-48l32 0c26.5 0 48 21.5 48 48l0 160c0 26.5-21.5 48-48 48l-32 0c-26.5 0-48-21.5-48-48L0 272zM368 96l32 0c26.5 0 48 21.5 48 48l0 288c0 26.5-21.5 48-48 48l-32 0c-26.5 0-48-21.5-48-48l0-288c0-26.5 21.5-48 48-48z" />
-                </svg>
+        <div class="p-10 flex items-center justify-between text-white bg-white/10 rounded-md">
+            <div class="flex items-center">
+                <div>
+                    {% comment %} svg icon {% endcomment %}
+                    <svg xmlns="http://www.w3.org/2000/svg" height="50" width="50" viewBox="0 0 448 512">
+                        <path fill="#ffffff"
+                            d="M160 80c0-26.5 21.5-48 48-48l32 0c26.5 0 48 21.5 48 48l0 352c0 26.5-21.5 48-48 48l-32 0c-26.5 0-48-21.5-48-48l0-352zM0 272c0-26.5 21.5-48 48-48l32 0c26.5 0 48 21.5 48 48l0 160c0 26.5-21.5 48-48 48l-32 0c-26.5 0-48-21.5-48-48L0 272zM368 96l32 0c26.5 0 48 21.5 48 48l0 288c0 26.5-21.5 48-48 48l-32 0c-26.5 0-48-21.5-48-48l0-288c0-26.5 21.5-48 48-48z" />
+                    </svg>
+                </div>
+                <h1 class="font-bold text-2xl pl-5">
+                    CandleStick Patterns
+                </h1>
             </div>
-            <h1 class="font-bold text-2xl pl-5">
-                CandleStick Patterns
-            </h1>
+            {% comment %} refresh data button {% endcomment %}
+            <button
+                type="submit"
+                onclick="openModel()"
+                class="bg-white text-black p-2 rounded-md hover:bg-gray-100 duration-200"
+            >
+                Refresh Data
+            </button>
+            {% comment %} Modal {% endcomment %}
+            <div id="refreshDataModal" class="fixed inset-0 z-50 bg-black bg-opacity-50 hidden flex items-center justify-center">
+                <div class="bg-white rounded-lg shadow-lg w-96 p-10">
+                    <h2 class="text-xl font-semibold mb-4 text-black">Select Start & End Date</h2>
+                    <form id="refreshForm" method="POST" action="{% url 'CandleStick' %}">
+                        {% csrf_token %}
+                        <label class="block mb-2 text-sm font-semibold text-gray-700">Start Date</label>
+                        <input type="date" name="start_date" required class="w-full p-2 border rounded-md mb-4 text-black" />
+
+                        <label class="block mb-2 text-sm font-semibold text-gray-700">End Date</label>
+                        <input type="date" name="end_date" required class="w-full p-2 border rounded-md mb-4 text-black" />
+
+                        <div class="flex justify-end space-x-2">
+                            <button type="button" onclick="closeModal()"
+                                class="bg-gray-300 hover:bg-gray-400 text-black px-4 py-2 rounded-md">Cancel</button>
+                            <button type="submit"
+                                class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md">Submit</button>
+                        </div>
+                    </form>
+
+                    <div id="loader" class="text-center hidden mt-4 text-black p-2">
+                        <p>Fetching data, please wait...</p>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="rounded-md w-full p-5">
             <table class="w-full text-left bg-white/10 overflow-hidden rounded-md table-auto text-white">
@@ -32,10 +68,45 @@
                 </tbody>
             </table>
         </div>
+        {% if message %}
+            <div id="toast" class="fixed top-5 left-1/2 transform -translate-x-1/2 z-50 bg-green-500 text-white px-4 py-2 rounded-md shadow-md hidden transition-opacity duration-500">
+                {{ message }}
+            </div>
+        {% endif %}
     </div>
-
-
-
-
 </div>
+<script>
+    function openModel() {
+        document.getElementById('refreshDataModal').classList.remove('hidden');
+    }
+
+    function closeModal() {
+        document.getElementById('refreshDataModal').classList.add('hidden');
+    }
+    // Show loader on form submit
+    document.getElementById('refreshForm').addEventListener('submit', function () {
+        document.getElementById('loader').classList.remove('hidden');
+    });
+
+    // Show toast if it exists
+    window.addEventListener("DOMContentLoaded", function () {
+        const toast = document.getElementById("toast");
+        if (toast) {
+            toast.classList.remove("hidden");
+            toast.classList.add("opacity-100");
+
+            // Optional: change color if error
+            {% if result != "Success" %}
+                toast.classList.remove("bg-green-500");
+                toast.classList.add("bg-red-500");
+            {% endif %}
+
+            // Auto-hide toast after 3 seconds
+            setTimeout(() => {
+                toast.classList.remove("opacity-100");
+                toast.classList.add("opacity-0");
+            }, 3000);
+        }
+    });
+</script>
 {% endblock %}

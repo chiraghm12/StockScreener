@@ -22,7 +22,7 @@ class OHLCDataAdmin(admin.ModelAdmin):
         "low_price",
     ]
     list_filter = ["data_date", "stock"]
-    search_fields = ["stock"]
+    search_fields = ["stock__symbol"]
 
 
 @admin.register(UpatoxAccessToken)
