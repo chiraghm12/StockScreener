@@ -1,3 +1,16 @@
+"""
+Defines URL routing for the stock analysis application.
+
+Each path is associated with a view that either handles stock data upload,
+displays candlestick pattern detections, or manages Upstox authentication.
+
+Paths:
+- Home
+- Upload OHLC stock data
+- Display detected candlestick patterns (e.g., Hammer, Doji, Kicker, Engulfing)
+- Upstox authentication flow (start + success redirect)
+"""
+
 from django.urls import path
 
 from .views import (

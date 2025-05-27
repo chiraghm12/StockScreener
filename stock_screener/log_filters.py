@@ -1,3 +1,7 @@
+"""
+Log Filters Module
+"""
+
 import logging
 
 
