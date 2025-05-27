@@ -285,6 +285,9 @@ def is_pro_gap_positive(first_candle, second_candle):
 
 
 def identify_single_candle_pattern():
+    """
+    Method for identify the single candlestick pattern and store in the table
+    """
     logger = logging.getLogger("stock_screener_logger")
     ohlc_data = OHLCData.objects.filter(data_date=datetime.today())
     hammers = []
@@ -347,6 +350,9 @@ def identify_single_candle_pattern():
 
 
 def identify_double_candle_pattern(start_date, end_date):
+    """
+    Method for identify the double candlestick pattern and store in the table
+    """
     logger = logging.getLogger("stock_screener_logger")
     ohlc_data = OHLCData.objects.filter()
     pro_gap_positive = []

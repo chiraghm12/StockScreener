@@ -1,3 +1,7 @@
+"""
+Logging Module
+"""
+
 import os
 from datetime import time
 

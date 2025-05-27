@@ -231,36 +231,58 @@ def upstox_authentication_success(request):
 
 
 def hammer_view(request):
+    """
+    View to display all Hammer candlestick patterns.
+
+    Retrieves all Hammer instances from the database and renders them
+    using the 'hammers.html' template. Passes the patterns and a result flag to the template.
+    """
     hammers = Hammer.objects.all()
 
     return render(
         request=request,
         template_name="hammers.html",
-        context={"hammers": hammers, "result": True if len(hammers) > 0 else False},
+        context={"hammers": hammers, "result": len(hammers) > 0},
     )
 
 
 def inverted_hammer_view(request):
+    """
+    View to display all Inverted Hammer candlestick patterns.
+
+    Retrieves all InvertedHammer instances from the database and renders them
+    using the 'invertedhammers.html' template.
+    """
     hammers = InvertedHammer.objects.all()
 
     return render(
         request=request,
         template_name="invertedhammers.html",
-        context={"hammers": hammers, "result": True if len(hammers) > 0 else False},
+        context={"hammers": hammers, "result": len(hammers) > 0},
     )
 
 
 def doji_view(request):
+    """
+    View to display all Doji candlestick patterns.
+
+    Retrieves all Doji instances and renders them in the 'doji.html' template.
+    """
     dojis = Doji.objects.all()
 
     return render(
         request=request,
         template_name="doji.html",
-        context={"dojis": dojis, "result": True if len(dojis) > 0 else False},
+        context={"dojis": dojis, "result": len(dojis) > 0},
     )
 
 
 def spinning_top_bottom_view(request):
+    """
+    View to display all Spinning Top and Bottom candlestick patterns.
+
+    Fetches all SpinningTopBottom instances and renders them using the 'spinningtopbottom.html' template.
+    """
     spinning_top_bottoms = SpinningTopBottom.objects.all()
 
     return render(
@@ -268,22 +290,32 @@ def spinning_top_bottom_view(request):
         template_name="spinningtopbottom.html",
         context={
             "spinning_top_bottoms": spinning_top_bottoms,
-            "result": True if len(spinning_top_bottoms) > 0 else False,
+            "result": len(spinning_top_bottoms) > 0,
         },
     )
 
 
 def pro_gap_positive_view(request):
+    """
+    View to display all Pro Gap Positive patterns.
+
+    Fetches all ProGapPositive instances and renders them using the 'progaps.html' template.
+    """
     pro_gaps = ProGapPositive.objects.all()
 
     return render(
         request=request,
         template_name="progaps.html",
-        context={"pro_gaps": pro_gaps, "result": True if len(pro_gaps) > 0 else False},
+        context={"pro_gaps": pro_gaps, "result": len(pro_gaps) > 0},
     )
 
 
 def bullish_engulfing_view(request):
+    """
+    View to display all Bullish Engulfing candlestick patterns.
+
+    Retrieves all BullishEngulfing instances and displays them via the 'bullishengulfing.html' template.
+    """
     bullish_engulfings = BullishEngulfing.objects.all()
 
     return render(
@@ -291,12 +323,17 @@ def bullish_engulfing_view(request):
         template_name="bullishengulfing.html",
         context={
             "bullish_engulfings": bullish_engulfings,
-            "result": True if len(bullish_engulfings) > 0 else False,
+            "result": len(bullish_engulfings) > 0,
         },
     )
 
 
 def bearish_engulfing_view(request):
+    """
+    View to display all Bearish Engulfing candlestick patterns.
+
+    Retrieves all BearishEngulfing instances and renders them using the 'bearishengulfing.html' template.
+    """
     bearish_engulfings = BearishEngulfing.objects.all()
 
     return render(
@@ -304,12 +341,17 @@ def bearish_engulfing_view(request):
         template_name="bearishengulfing.html",
         context={
             "bearish_engulfings": bearish_engulfings,
-            "result": True if len(bearish_engulfings) > 0 else False,
+            "result": len(bearish_engulfings) > 0,
         },
     )
 
 
 def bullish_kicker_view(request):
+    """
+    View to display all Bullish Kicker candlestick patterns.
+
+    Fetches all BullishKicker instances and renders them with the 'bullishkicker.html' template.
+    """
     bullish_kickers = BullishKicker.objects.all()
 
     return render(
@@ -317,12 +359,17 @@ def bullish_kicker_view(request):
         template_name="bullishkicker.html",
         context={
             "bullish_kickers": bullish_kickers,
-            "result": True if len(bullish_kickers) > 0 else False,
+            "result": len(bullish_kickers) > 0,
         },
     )
 
 
 def bearish_kicker_view(request):
+    """
+    View to display all Bearish Kicker candlestick patterns.
+
+    Fetches all BearishKicker instances and renders them with the 'bearishkicker.html' template.
+    """
     bearish_kickers = BearishKicker.objects.all()
 
     return render(
@@ -330,6 +377,6 @@ def bearish_kicker_view(request):
         template_name="bearishkicker.html",
         context={
             "bearish_kickers": bearish_kickers,
-            "result": True if len(bearish_kickers) > 0 else False,
+            "result": len(bearish_kickers) > 0,
         },
     )
