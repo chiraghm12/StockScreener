@@ -27,9 +27,14 @@ from stock_screener.settings import (
 )
 
 from .models import (
+    BearishEngulfing,
+    BearishKicker,
+    BullishEngulfing,
+    BullishKicker,
     Doji,
     Hammer,
     InvertedHammer,
+    ProGapPositive,
     SpinningTopBottom,
     Stock,
     UpatoxAccessToken,
@@ -67,11 +72,11 @@ def candlestickpatterns_view(request):
         {"name": "Inverted Hammer", "uri": "Inverted-Hammer-Page"},
         {"name": "Doji", "uri": "Doji-Page"},
         {"name": "Spinning Top Bottom", "uri": "Spinning-Top-Bottom-Page"},
-        {"name": "Pro Gap Positive", "uri": "Hammer-Page"},
-        {"name": "Bullish Kicker", "uri": "Hammer-Page"},
-        {"name": "Bullish Engulfing", "uri": "Hammer-Page"},
-        {"name": "Bearish Kicker", "uri": "Hammer-Page"},
-        {"name": "Bearish Engulfing", "uri": "Hammer-Page"},
+        {"name": "Pro Gap Positive", "uri": "Pro-Gap-Page"},
+        {"name": "Bullish Kicker", "uri": "Bullish-Kicker-Page"},
+        {"name": "Bullish Engulfing", "uri": "Bullish-Engulfing-Page"},
+        {"name": "Bearish Kicker", "uri": "Bearish-Kicker-Page"},
+        {"name": "Bearish Engulfing", "uri": "Bearish-Engulfing-Page"},
     ]
     if request.method == "POST":
         start_date = request.POST.get("start_date")
@@ -264,5 +269,67 @@ def spinning_top_bottom_view(request):
         context={
             "spinning_top_bottoms": spinning_top_bottoms,
             "result": True if len(spinning_top_bottoms) > 0 else False,
+        },
+    )
+
+
+def pro_gap_positive_view(request):
+    pro_gaps = ProGapPositive.objects.all()
+
+    return render(
+        request=request,
+        template_name="progaps.html",
+        context={"pro_gaps": pro_gaps, "result": True if len(pro_gaps) > 0 else False},
+    )
+
+
+def bullish_engulfing_view(request):
+    bullish_engulfings = BullishEngulfing.objects.all()
+
+    return render(
+        request=request,
+        template_name="bullishengulfing.html",
+        context={
+            "bullish_engulfings": bullish_engulfings,
+            "result": True if len(bullish_engulfings) > 0 else False,
+        },
+    )
+
+
+def bearish_engulfing_view(request):
+    bearish_engulfings = BearishEngulfing.objects.all()
+
+    return render(
+        request=request,
+        template_name="bearishengulfing.html",
+        context={
+            "bearish_engulfings": bearish_engulfings,
+            "result": True if len(bearish_engulfings) > 0 else False,
+        },
+    )
+
+
+def bullish_kicker_view(request):
+    bullish_kickers = BullishKicker.objects.all()
+
+    return render(
+        request=request,
+        template_name="bullishkicker.html",
+        context={
+            "bullish_kickers": bullish_kickers,
+            "result": True if len(bullish_kickers) > 0 else False,
+        },
+    )
+
+
+def bearish_kicker_view(request):
+    bearish_kickers = BearishKicker.objects.all()
+
+    return render(
+        request=request,
+        template_name="bearishkicker.html",
+        context={
+            "bearish_kickers": bearish_kickers,
+            "result": True if len(bearish_kickers) > 0 else False,
         },
     )

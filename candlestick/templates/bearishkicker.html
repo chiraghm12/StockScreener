@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}Bearish Kicker{% endblock %}
+
+{% block content %}
+<div class="h-screen bg-gradient-to-br from-[#1E3A8A] to-[#0D9488] overflow-auto hide-scrollbar">
+    <div class="flex flex-col justify-center p-5 gap-y-2">
+        <div class="p-10 flex items-center justify-between text-white bg-white/10 rounded-md">
+            <div class="flex items-center">
+                <div>
+                    {% comment %} svg icon {% endcomment %}
+                    <svg xmlns="http://www.w3.org/2000/svg" height="50" width="50" viewBox="0 0 448 512">
+                        <path fill="#ffffff"
+                            d="M160 80c0-26.5 21.5-48 48-48l32 0c26.5 0 48 21.5 48 48l0 352c0 26.5-21.5 48-48 48l-32 0c-26.5 0-48-21.5-48-48l0-352zM0 272c0-26.5 21.5-48 48-48l32 0c26.5 0 48 21.5 48 48l0 160c0 26.5-21.5 48-48 48l-32 0c-26.5 0-48-21.5-48-48L0 272zM368 96l32 0c26.5 0 48 21.5 48 48l0 288c0 26.5-21.5 48-48 48l-32 0c-26.5 0-48-21.5-48-48l0-288c0-26.5 21.5-48 48-48z" />
+                    </svg>
+                </div>
+                <h1 class="font-bold text-2xl pl-5">
+                    Bearish Kicker
+                </h1>
+            </div>
+        </div>
+        <div class="rounded-md w-full p-5">
+            <table class="w-full text-left bg-white/10 overflow-hidden rounded-md table-auto text-white">
+                <thead class="uppercase bg-white/30">
+                    <tr>
+                        <th class="p-5">Stock List</th>
+                    </tr>
+                </thead>
+                {% if not result %}
+                    <tbody class="font-normal">
+                        <tr class="hover:bg-white/15 duration-200">
+                            <td class="p-5">No Stocks</td>
+                        </tr>
+                    </tbody>
+                {% endif %}
+                {% if result %}
+                    <tbody class="font-normal">
+                        {% for bearish_kicker in bearish_kickers %}
+                            <tr class="cursor-pointer {% if not forloop.last %}border-b border-white/20{% endif %} hover:bg-white/15 duration-200">
+                                <td class="p-5">{{ bearish_kicker.stock }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                {% endif %}
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
