@@ -2,11 +2,16 @@ from django.urls import path
 
 from .views import (
     UploadStockDataView,
+    bearish_engulfing_view,
+    bearish_kicker_view,
+    bullish_engulfing_view,
+    bullish_kicker_view,
     candlestickpatterns_view,
     doji_view,
     hammer_view,
     home_view,
     inverted_hammer_view,
+    pro_gap_positive_view,
     spinning_top_bottom_view,
     upstox_authentication_success,
     upstox_authentication_view,
@@ -30,4 +35,9 @@ urlpatterns = [
     path(
         "spinning-top-bottom", spinning_top_bottom_view, name="Spinning-Top-Bottom-Page"
     ),
+    path("pro-gap-positive", pro_gap_positive_view, name="Pro-Gap-Page"),
+    path("bullish-engulfing", bullish_engulfing_view, name="Bullish-Engulfing-Page"),
+    path("bearish-engulfing", bearish_engulfing_view, name="Bearish-Engulfing-Page"),
+    path("bullish-kicker", bullish_kicker_view, name="Bullish-Kicker-Page"),
+    path("bearish-kicker", bearish_kicker_view, name="Bearish-Kicker-Page"),
 ]
