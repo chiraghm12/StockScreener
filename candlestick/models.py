@@ -27,14 +27,77 @@ class OHLCData(models.Model):
 
 class Hammer(models.Model):
     data_date = models.DateField()
-    stocks = models.ManyToManyField(Stock)
+    stock = models.ForeignKey(Stock, on_delete=models.CASCADE, related_name="hammer")
 
     objects = models.Manager()
 
 
 class InvertedHammer(models.Model):
     data_date = models.DateField()
-    stocks = models.ManyToManyField(Stock)
+    stock = models.ForeignKey(
+        Stock, on_delete=models.CASCADE, related_name="inverted_hammer"
+    )
+
+    objects = models.Manager()
+
+
+class Doji(models.Model):
+    data_date = models.DateField()
+    stock = models.ForeignKey(Stock, on_delete=models.CASCADE, related_name="doji")
+
+    objects = models.Manager()
+
+
+class SpinningTopBottom(models.Model):
+    data_date = models.DateField()
+    stock = models.ForeignKey(
+        Stock, on_delete=models.CASCADE, related_name="spinning_top_bottom"
+    )
+
+    objects = models.Manager()
+
+
+class ProGapPositive(models.Model):
+    data_date = models.DateField()
+    stock = models.ForeignKey(
+        Stock, on_delete=models.CASCADE, related_name="pro_gap_positive"
+    )
+
+    objects = models.Manager()
+
+
+class BullishEngulfing(models.Model):
+    data_date = models.DateField()
+    stock = models.ForeignKey(
+        Stock, on_delete=models.CASCADE, related_name="bullish_engulfing"
+    )
+
+    objects = models.Manager()
+
+
+class BearishEngulfing(models.Model):
+    data_date = models.DateField()
+    stock = models.ForeignKey(
+        Stock, on_delete=models.CASCADE, related_name="bearish_engulfing"
+    )
+
+    objects = models.Manager()
+
+
+class BullishKicker(models.Model):
+    data_date = models.DateField()
+    stock = models.ForeignKey(
+        Stock, on_delete=models.CASCADE, related_name="bullish_kicker"
+    )
+
+    objects = models.Manager()
+
+
+class BearishKicker(models.Model):
+    data_date = models.DateField()
+    stock = models.ForeignKey(
+        Stock, on_delete=models.CASCADE, related_name="bearish_kicker"
+    )
 
     objects = models.Manager()
 

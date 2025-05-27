@@ -60,9 +60,9 @@
                     </tr>
                 </thead>
                 <tbody class="font-normal">
-                    {% for pat in pattern %}
-                        <tr class="cursor-pointer {% if not forloop.last %}border-b border-white/20{% endif %} hover:bg-white/15 duration-200">
-                            <td class="p-5">{{ pat }}</td>
+                    {% for pattern in patterns %}
+                        <tr class="cursor-pointer {% if not forloop.last %}border-b border-white/20{% endif %} hover:bg-white/15 duration-200" onclick="window.location.href='{% url pattern.uri %}'">
+                            <td class="p-5">{{ pattern.name }}</td>
                         </tr>
                     {% endfor %}
                 </tbody>

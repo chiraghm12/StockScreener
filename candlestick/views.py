@@ -8,8 +8,6 @@ managing Upstox authentication for a Django-based stock screener application.
 import csv
 import io
 import logging
-import time
-from datetime import datetime
 
 import requests
 from django.db import transaction
@@ -28,66 +26,15 @@ from stock_screener.settings import (
     REDIRCT_URL,
 )
 
-from .models import OHLCData, Stock, UpatoxAccessToken
-
-
-def refresh_candlestick_data(start_date, end_date):
-    """
-    Fetches OHLC (Open, High, Low, Close) candlestick data for all stocks between the given dates
-    using the Upstox API and stores them in the database.
-
-    Args:
-        start_date (str): The start date in 'YYYY-MM-DD' format.
-        end_date (str): The end date in 'YYYY-MM-DD' format.
-
-    Returns:
-        str: "Success" if data was fetched and stored successfully, otherwise "Error".
-    """
-    logger = logging.getLogger("stock_screener_logger")
-    try:
-        stocks = Stock.objects.all()
-        access_token = UpatoxAccessToken.objects.all()[0].token
-
-        logger.info("OHLC Data fetch Starting..")
-        # Delete all old Data
-        OHLCData.objects.all().delete()
-
-        for stock in stocks:
-            # fetch data from upstox
-            url = f"https://api.upstox.com/v3/historical-candle/{stock.isin_code}/days/1/{end_date}/{start_date}"
-            headers = {"Accept": "application/json", "Authorization": access_token}
-            payload = {}
-            response = requests.get(url, headers=headers, data=payload, timeout=120)
-            response_data = response.json()
-
-            if response_data.get("status") == "success":
-                candle_data = response_data.get("data")
-                ohlc_objects = []
-
-                for ohlc in candle_data.get("candles"):
-                    ohlc_objects.append(
-                        OHLCData(
-                            data_date=datetime.fromisoformat(ohlc[0]).date(),
-                            open_price=ohlc[1],
-                            high_price=ohlc[2],
-                            low_price=ohlc[3],
-                            close_price=ohlc[4],
-                            stock=stock,
-                        )
-                    )
-                if ohlc_objects:
-                    # create ohlc data for two days in bulk
-                    OHLCData.objects.bulk_create(ohlc_objects, batch_size=100)
-                    logger.info(
-                        f"Data for {stock.symbol} fetched"
-                    )  # pylint: disable=W1203
-            # sleep half second in between
-            time.sleep(0.5)
-        logger.info("OHLC Data fetched Successfully")
-        return "Success"
-    except Exception as e:  # pylint: disable=W0718
-        logger.error(f"Error : {e}", exc_info=True)  # pylint: disable=W1203
-        return "Error"
+from .models import (
+    Doji,
+    Hammer,
+    InvertedHammer,
+    SpinningTopBottom,
+    Stock,
+    UpatoxAccessToken,
+)
+from .utils import refresh_candlestick_data
 
 
 def home_view(request):
@@ -116,15 +63,15 @@ def candlestickpatterns_view(request):
         HttpResponse: Rendered patterns.html page with patterns and result message.
     """
     patterns = [
-        "Hammer",
-        "Inverted Hammer",
-        "Doji",
-        "Spinning Top Bottom",
-        "Pro Gap Positive",
-        "Bullish Kicker",
-        "Bullish Engulfing",
-        "Bearish Kicker",
-        "Bearish Engulfing",
+        {"name": "Hammer", "uri": "Hammer-Page"},
+        {"name": "Inverted Hammer", "uri": "Inverted-Hammer-Page"},
+        {"name": "Doji", "uri": "Doji-Page"},
+        {"name": "Spinning Top Bottom", "uri": "Spinning-Top-Bottom-Page"},
+        {"name": "Pro Gap Positive", "uri": "Hammer-Page"},
+        {"name": "Bullish Kicker", "uri": "Hammer-Page"},
+        {"name": "Bullish Engulfing", "uri": "Hammer-Page"},
+        {"name": "Bearish Kicker", "uri": "Hammer-Page"},
+        {"name": "Bearish Engulfing", "uri": "Hammer-Page"},
     ]
     if request.method == "POST":
         start_date = request.POST.get("start_date")
@@ -152,7 +99,7 @@ def candlestickpatterns_view(request):
     return render(
         request=request,
         template_name="patterns.html",
-        context={"pattern": patterns, "result": result, "message": message},
+        context={"patterns": patterns, "result": result, "message": message},
     )
 
 
@@ -276,3 +223,46 @@ def upstox_authentication_success(request):
 
     UpatoxAccessToken.objects.create(token=access_token)
     return render(request=request, template_name="success.html")
+
+
+def hammer_view(request):
+    hammers = Hammer.objects.all()
+
+    return render(
+        request=request,
+        template_name="hammers.html",
+        context={"hammers": hammers, "result": True if len(hammers) > 0 else False},
+    )
+
+
+def inverted_hammer_view(request):
+    hammers = InvertedHammer.objects.all()
+
+    return render(
+        request=request,
+        template_name="invertedhammers.html",
+        context={"hammers": hammers, "result": True if len(hammers) > 0 else False},
+    )
+
+
+def doji_view(request):
+    dojis = Doji.objects.all()
+
+    return render(
+        request=request,
+        template_name="doji.html",
+        context={"dojis": dojis, "result": True if len(dojis) > 0 else False},
+    )
+
+
+def spinning_top_bottom_view(request):
+    spinning_top_bottoms = SpinningTopBottom.objects.all()
+
+    return render(
+        request=request,
+        template_name="spinningtopbottom.html",
+        context={
+            "spinning_top_bottoms": spinning_top_bottoms,
+            "result": True if len(spinning_top_bottoms) > 0 else False,
+        },
+    )
