@@ -1,4 +1,4 @@
-# 📈 Candlestick Pattern Detection with Upstox Integration
+# 📈 Stock Screener with Upstox Integration
 
 This Django project allows users to upload OHLC (Open, High, Low, Close) stock data and visually identify various candlestick patterns such as Hammer, Doji, Engulfing, Kicker, and more. The platform integrates with Upstox for authenticated operations and supports admin-based management of stock data.
 
