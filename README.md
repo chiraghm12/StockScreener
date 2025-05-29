@@ -138,7 +138,7 @@ Upstox Authorization
 
 ## 🙏 Acknowledgement
 
-* This project was made possible through the use of the following tools and platforms:
+This project was made possible through the use of the following tools and platforms:
 * **Django** – for providing a robust and scalable backend web framework.
 * **Tailwind CSS** – for enabling rapid and responsive frontend development with utility-first CSS.
 * **Upstox API** – for access to real-time and historical market data, essential for candlestick pattern detection.
