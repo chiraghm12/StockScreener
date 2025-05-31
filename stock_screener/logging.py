@@ -107,8 +107,6 @@ for log_type in log_types:
         "level": "DEBUG",
         "propagate": True,
     }
-    # if log_type == "pcr":
-    #     loggers[f"{log_type}_logger"]["handlers"].append("console")
 
 LOGGING = {
     "version": LOGGING_VERSION,
